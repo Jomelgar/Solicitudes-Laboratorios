@@ -25,6 +25,7 @@ const CaseDetail = () => {
   const [loading, setLoading] = useState(true);
   const [caseData, setCaseData] = useState(null);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCase = async () => {
