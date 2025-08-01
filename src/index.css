@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes sweep {
+  0% {
+    left: -20%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+.animate-sweep {
+  animation: sweep 2.5s linear infinite;
+}
+
+@keyframes sweep-reverse {
+  0% {
+    right: -20%;
+  }
+  100% {
+    right: 100%;
+  }
+}
+.animate-sweep-reverse {
+  animation: sweep-reverse 2.5s linear infinite;
+}
