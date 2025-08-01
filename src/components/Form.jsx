@@ -250,7 +250,7 @@
         }
 
         message.success('Solicitud enviada correctamente');
-        setFormSubmitted(false);
+        setFormSubmitted(true);
       } catch (err) {
         message.error('Ocurrió un error al enviar el formulario');
       } finally {
