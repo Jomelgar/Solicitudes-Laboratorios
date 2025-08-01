@@ -7,7 +7,7 @@ import {
   Divider,
   Tag,
 } from "antd";
-import { useParams } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 import {
   FileTextOutlined,
   UserOutlined,
@@ -83,7 +83,7 @@ const CaseDetail = () => {
         .eq("hash_id", id)
         .single();
 
-      if (error) setError(error.message);
+      if (error || !caseData) navigate('/error');
       else setCaseData(data);
 
       setLoading(false);
@@ -98,8 +98,6 @@ const CaseDetail = () => {
         <Spin size="large" />
       </div>
     );
-  if (error) return <div className="text-center text-red-600 mt-4">{error}</div>;
-  if (!caseData) return null;
 
   const { student, from_lab_section, to_lab_section } = caseData;
 
