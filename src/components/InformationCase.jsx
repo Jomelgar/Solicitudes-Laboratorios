@@ -84,7 +84,7 @@ const CaseDetail = () => {
         .eq("hash_id", id)
         .single();
 
-      if (error || !caseData) navigate('/error');
+      if (error || !data) navigate('/error');
       else setCaseData(data);
 
       setLoading(false);
