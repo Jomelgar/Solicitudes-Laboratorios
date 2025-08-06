@@ -5,6 +5,7 @@
   import { useNavigate } from "react-router-dom";
   import passToPDF from '../utils/toPdf.jsx';
   import {sendNotificationStudent, sendNotificationUser} from '../utils/email';
+  import Cookies from 'js-cookie';
   import dayjs from 'dayjs';
 
   const { Title } = Typography;
@@ -37,6 +38,10 @@
     const [classSections,setClassSections] = useState([]);
     const [labSections,setLabSections] = useState([]);
     
+    useEffect(()=>{
+      form.setFieldValue('email',Cookies.get('email_student'));
+    },[]);
+
     //Fetches
     const fetchClasses = async () => {
         const { data, error } = await supabase.from('class').select('*');
@@ -59,12 +64,12 @@
 
     //Functions
 
-    const searchStudent = async (numeroCuenta) => {
-    if (!numeroCuenta) return;
+    const searchStudent = async (email) => {
+    if (!email) return;
     const { data, error } = await supabase
       .from('student')
       .select('*')
-      .eq('account_number', numeroCuenta)
+      .eq('email', email)
       .single();
 
     if (data) {
@@ -73,7 +78,7 @@
         second_name: data.second_name,
         last_name: data.last_name,
         second_last_name: data.second_last_name,
-        email: data.email,
+        account_number: data.account_number,
       });
     } else if (error) {
       throw new error('Estudiante no encontrado');
@@ -150,7 +155,7 @@
         const { data: existingStudent } = await supabase
           .from('student')
           .select('*')
-          .eq('account_number', values.account_number)
+          .eq('email', values.email)
           .single();
 
         // 6. Insertar estudiante si no existe
@@ -298,13 +303,26 @@
                 title={<h2 className='text-black  '>Información  Personal</h2>}
                 bordered={false}
               >
+                
+                {/* Correo Electrónico */}
+                <Form.Item
+                  label="Correo Electrónico"
+                  name="email"
+                  rules={[
+                    { required: true, message: 'Este campo es obligatorio' },
+                    { type: 'email', message: 'Correo no válido' },
+                  ]}
+                >
+                  <Input disabled placeholder="Correo Electrónico" onChange={(e)=>searchStudent(e.target.value)}/>
+                </Form.Item>
+                
                 {/* Número de Cuenta */}
                 <Form.Item
                   label="Número de Cuenta"
                   name="account_number"
                   rules={[{ required: true, message: 'Este campo es obligatorio' }]}
                 >
-                  <Input type='number' placeholder="Número de Cuenta" onChange={(e)=>searchStudent(e.target.value)} />
+                  <Input type='number' placeholder="Número de Cuenta"/>
                 </Form.Item>
 
                 {/* Primer y Segundo Nombre */}
@@ -343,18 +361,6 @@
                     </Form.Item>
                   </Col>
                 </Row>
-
-                {/* Correo Electrónico */}
-                <Form.Item
-                  label="Correo Electrónico"
-                  name="email"
-                  rules={[
-                    { required: true, message: 'Este campo es obligatorio' },
-                    { type: 'email', message: 'Correo no válido' },
-                  ]}
-                >
-                  <Input placeholder="Correo Electrónico" />
-                </Form.Item>
               </Card>
 
               <Card className='mb-4' title={<h2 className='text-black mb-3 mt-3'>Información de Solicitud</h2>} bordered={true}>

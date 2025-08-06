@@ -28,11 +28,12 @@ const ClassSections = () => {
         id,
         section,
         trimester,
+        year,
         class (
           id,
           name
         )
-      `);
+      `).eq('active',true);
 
     if (error) {
       setData([]);
@@ -45,7 +46,7 @@ const ClassSections = () => {
   const handleDelete = async (sectionId) => {
     const { error } = await supabase
       .from('class_section')
-      .delete()
+      .update({active: false})
       .eq('id', sectionId);
 
     if (!error) {
@@ -68,7 +69,8 @@ const ClassSections = () => {
     const { data, error } = await supabase.from('class_section').insert([{
       class_id: newSection.class,
       section: newSection.section,
-      trimester: newSection.trimester
+      trimester: newSection.trimester,
+      year: newSection.year,
     }]);
     console.log('Error: ', error);
     fetchData();
@@ -129,6 +131,16 @@ const ClassSections = () => {
       key: ['class', 'id'],
       filters: classes,
       onFilter: (value, record) => record.class?.id === value
+    },
+    {
+      title: "Año",
+      dataIndex: 'year',
+      key: 'year',
+      filters: Array.from(new Set((data || []).map(d => d?.year)))
+        .filter(Boolean) 
+        .map(value => ({ text: value, value })), 
+      onFilter: (value, record) => record?.year === value,
+      render: (_, record) => record?.year ?? "—",
     },
     {
       title: 'Trimestre',

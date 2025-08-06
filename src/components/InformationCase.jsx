@@ -21,7 +21,7 @@ import supabase from "../utils/supabaseClient";
 const { Title, Text } = Typography;
 
 const CaseDetail = () => {
-  const { id } = useParams(); // hash_id
+  const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [caseData, setCaseData] = useState(null);
   const [error, setError] = useState(null);

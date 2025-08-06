@@ -31,11 +31,13 @@ const ClassSections = () => {
         start_schedule,
         end_schedule,
         day,
+        year,
+        active,
         class (
           id,
           name
         )
-      `);
+      `).eq('active',true);
 
     if (error) {
       setData([]);
@@ -65,8 +67,8 @@ const ClassSections = () => {
 
   const handleDelete = async (sectionId) => {
     const { error } = await supabase
-      .from('lab_section') // ← CORREGIDO: antes decía 'class_section'
-      .delete()
+      .from('lab_section')
+      .update({active: false})
       .eq('id', sectionId);
 
     if (!error) {
@@ -138,6 +140,7 @@ const ClassSections = () => {
         start_schedule: startTime,
         end_schedule: endTime,
         day: newSection.day,
+        year: newSection.year,
       }]);
     fetchData();
   };
@@ -158,6 +161,16 @@ const ClassSections = () => {
       key: ['class', 'id'],
       filters: classes,
       onFilter: (value, record) => record.class?.id === value
+    },
+    {
+      title: "Año",
+      dataIndex: 'year',
+      key: 'year',
+      filters: Array.from(new Set((data || []).map(d => d?.year)))
+        .filter(Boolean) 
+        .map(value => ({ text: value, value })), 
+      onFilter: (value, record) => record?.year === value,
+      render: (_, record) => record?.year ?? "—",
     },
     {
       title: 'Trimestre',

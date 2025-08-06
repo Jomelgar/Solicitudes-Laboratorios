@@ -51,8 +51,7 @@ const Cases = () => {
             name
           )
         )
-      `)
-      .eq("phase", "Procesando");
+      `);
 
     if (error) {
       message.error("Error al cargar los casos");
@@ -157,30 +156,40 @@ const Cases = () => {
       title: "Fase",
       dataIndex: "phase",
       key: "phase",
+        filters: Array.from(
+        new Set(data.map((d) => d?.phase))
+      )
+        .filter(Boolean)
+        .map((name) => ({ text: name, value: name })),
+      onFilter: (value, record) => record.phase === value,
+      render: (_, record) => record.phase ?? "—",
     },
     {
       title: "Acciones",
       key: "actions",
-      render: (_, record) => (
-        <Space>
-          <Button
-            type="primary"
-            icon={<CheckOutlined />}
-            onClick={() => openModal(record, "Aceptado")}
-          >
-            Aprobar
-          </Button>
-          <Button
-            type="default"
-            danger
-            icon={<CloseOutlined />}
-            onClick={() => openModal(record, "Denegado")}
-          >
-            Denegar
-          </Button>
-        </Space>
-      ),
-    },
+      render: (_, record) =>
+        record.phase !== "Aceptado" && record.phase !== "Denegado" ? (
+          <Space>
+            <Button
+              type="primary"
+              icon={<CheckOutlined />}
+              onClick={() => openModal(record, "Aceptado")}
+            >
+              Aprobar
+            </Button>
+            <Button
+              type="default"
+              danger
+              icon={<CloseOutlined />}
+              onClick={() => openModal(record, "Denegado")}
+            >
+              Denegar
+            </Button>
+          </Space>
+        ) : (
+          <span className="text-gray-400 italic">Ya procesado</span>
+        ),
+    }
   ];
 
   useEffect(() => {

@@ -10,12 +10,14 @@ import {
   FileTextOutlined,
   ProfileOutlined,
   MenuUnfoldOutlined,
-  MenuFoldOutlined
+  MenuFoldOutlined,
+  KeyOutlined
 } from "@ant-design/icons";
 import Profile from "./Profile";
 import Sections from './classSections';
 import Labs from './labSections'
 import Cases from './Cases';
+import Classes from './Class';
 import Users from './Users';
 import logo from "/UT.png";
 
@@ -53,7 +55,10 @@ function Home({ enableHome }) {
               <Menu.Item key="cases" icon={<FileTextOutlined />}>
                 Casos
               </Menu.Item>
-              <Menu.Item key="clases" icon={<DesktopOutlined />}>
+              <Menu.Item key="clases" icon={<KeyOutlined />}>
+                Clases
+              </Menu.Item>
+              <Menu.Item key="seccion" icon={<DesktopOutlined />}>
                 Secciones de clase
               </Menu.Item>
               <Menu.Item key="labs" icon={<TeamOutlined />}>
@@ -92,8 +97,9 @@ function Home({ enableHome }) {
             </Header>
 
             <Content className="m-6 bg-white min-h-[360px] w-full rounded-xl p-6">
+              {activeView === 'clases' && <Classes/>}
               {activeView === "cases" && <Cases/>}
-              {activeView === "clases" && <Sections/>}
+              {activeView === "seccion" && <Sections/>}
               {activeView === "labs" && <Labs/>}
               {activeView === "usuarios" && <Users view={(id) => {setId(id); setActiveView('profile');}}/>}
               {activeView === "profile" && <Profile id={id} setId={setId}/>}

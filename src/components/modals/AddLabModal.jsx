@@ -41,7 +41,7 @@ const AddLabModal = ({ open, onCancel, onAdd }) => {
       title="Agregar Nueva Sección"
       onCancel={handleCancel}
       footer={null}
-      destroyOnClose={true} // opcional, destruye el modal y reinicia todo
+      destroyOnClose={true}
     >
       <Form form={form} layout="vertical" onFinish={handleFinish}>
         <Form.Item
@@ -78,7 +78,24 @@ const AddLabModal = ({ open, onCancel, onAdd }) => {
             </Form.Item>
           </Col>
         </Row>
-
+        <Col>
+          <Form.Item
+          label="Año"
+          name="year"
+          rules={[{ required: true, message: "Ingrese la sección" }]}
+          >
+          <Input
+              type="number"
+              min="0"
+              step="1"
+              onKeyDown={(e) => {
+              if (e.key === '.' || e.key === ',' || e.key === 'e') {
+                  e.preventDefault();
+              }
+              }}
+          />
+          </Form.Item>
+        </Col>
         <Row gutter={16}>
             <Col xs={12}>
                 <Form.Item

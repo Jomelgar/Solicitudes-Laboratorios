@@ -104,3 +104,41 @@ export function downloadClassSectionTemplateExcel(classReferenceData) {
     window.URL.revokeObjectURL(url);
   }, 0);
 }
+
+export async function readClassExcel(file) {
+  const data = await file.arrayBuffer(); 
+  const workbook = XLSX.read(data, { type: 'array' });
+
+  const classSheet = workbook.Sheets['Clases']
+    ? XLSX.utils.sheet_to_json(workbook.Sheets['Clases'])
+    : [];
+
+  return classSheet;
+}
+
+export function downloadClassTemplateExcel() {
+  const classTemplate = [
+    { Nombre: 'Programación I' },
+    { Nombre: 'Estructura de Datos' }
+  ];
+
+  const workbook = XLSX.utils.book_new();
+  const sheet = XLSX.utils.json_to_sheet(classTemplate);
+
+  XLSX.utils.book_append_sheet(workbook, sheet, 'Clases');
+
+  const wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+  const blob = new Blob([wbout], { type: 'application/octet-stream' });
+  const url = window.URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'Plantilla_Clases.xlsx';
+  document.body.appendChild(a);
+  a.click();
+
+  setTimeout(() => {
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }, 0);
+}

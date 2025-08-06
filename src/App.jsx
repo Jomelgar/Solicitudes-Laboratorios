@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Verification from './components/Verification'
 import Home from './components/Home'
+import StudentMenu from './components/Student'
 import Form from './components/Form'
 import Error from './components/Error'
 import './index.css'
@@ -10,7 +11,7 @@ import Cookies from 'js-cookie'
 
 function App() {
   const [home, setHome] = useState(Cookies.get('user_id') !== null && Cookies.get('user_id') !== undefined); 
-  const [form, setForm] = useState(false);
+  const [form, setForm] = useState(Cookies.get('email_student') !== null && Cookies.get('email_student') !== undefined);
   const [error, setError] = useState(false);
   const [backgroundUrl, setBackgroundUrl] = useState('/fondoDARK.webp');
 
@@ -31,7 +32,7 @@ function App() {
           
           {form && 
           (
-            <Route path="/form" element={<Form enableForm={setForm}/>} />
+            <Route path="/form" element={<StudentMenu/>} />
           )}
 
           <Route 

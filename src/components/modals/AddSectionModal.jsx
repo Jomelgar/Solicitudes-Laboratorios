@@ -93,7 +93,26 @@ const AddSectionModal = ({ open, onCancel, onAdd }) => {
                 </Form.Item>
             </Col>
         </Row>
-        
+
+        <Col>
+          <Form.Item
+          label="Año"
+          name="year"
+          rules={[{ required: true, message: "Ingrese la sección" }]}
+          >
+          <Input
+              type="number"
+              min="0"
+              step="1"
+              onKeyDown={(e) => {
+              if (e.key === '.' || e.key === ',' || e.key === 'e') {
+                  e.preventDefault();
+              }
+              }}
+          />
+          </Form.Item>
+        </Col>
+
         <Form.Item>
           <Button type="primary" htmlType="submit" block>
             Agregar
