@@ -37,9 +37,12 @@
     const [classes, setClasses] = useState([]);
     const [classSections,setClassSections] = useState([]);
     const [labSections,setLabSections] = useState([]);
+    const [created,setCreated] = useState(false);
     
     useEffect(()=>{
-      form.setFieldValue('email',Cookies.get('email_student'));
+      const email = Cookies.get('email_student');
+      form.setFieldValue('email',email);
+      searchStudent(email);
     },[]);
 
     //Fetches
@@ -72,7 +75,7 @@
       .eq('email', email)
       .single();
 
-    if (data) {
+    if (!error) {
       form.setFieldsValue({
         first_name: data.first_name,
         second_name: data.second_name,
@@ -80,8 +83,9 @@
         second_last_name: data.second_last_name,
         account_number: data.account_number,
       });
-    } else if (error) {
-      throw new error('Estudiante no encontrado');
+      setCreated(true);
+    } else {
+      setCreated(false);
     }
   };
 
@@ -255,6 +259,7 @@
         }
 
         message.success('Solicitud enviada correctamente');
+        setCreated(true);
         setFormSubmitted(true);
       } catch (err) {
         message.error('Ocurrió un error al enviar el formulario');
@@ -266,7 +271,7 @@
     return (
       <Spin spinning={loading} tip="Enviando solicitud..."> 
       <Row justify="center" align="middle" style={{ minHeight: '100vh' }}>
-        <Col xs={24} sm={22} md={20} lg={16} xl={12}>
+        <Col xs={30} sm={26} md={20} lg={16} xl={12}>
           {formSubmitted ? (
             <Card className='text-center p-6'>
               {/* Imagen de fondo transparente */}
@@ -285,14 +290,16 @@
           ):(
             <Card
             title={
-              <h1
-                level={2} 
-                className="text-center m-0 mt-3 text-blue-500 font-extrabold text-2xl sm:text-2xl md:text-3xl lg:text-2xl xl:text-4xl break-words"
-                style={{ whiteSpace: 'normal', lineHeight: 1.2 }}
-              >
-                <img alt='unitec' src='/UT.png' className='w-5 mb-5 xl:w-10 md:w-8'/>
-                Formulario de Solicitud
-              </h1>
+              <div className="w-full text-center mb-8">
+                <img alt="unitec" src="/UT.png" className="w-10 md:w-14 mx-auto mb-3" />
+                <Title
+                  level={2}
+                  className="!text-blue-500 !font-extrabold !text-xl md:!text-4xl"
+                  style={{ marginBottom: 0 }}
+                >
+                  Formulario de Solicitud
+                </Title>
+              </div>
             }
             bordered={true}
             className="rounded-none md:rounded-lg xl:rounded-xl"
@@ -322,7 +329,7 @@
                   name="account_number"
                   rules={[{ required: true, message: 'Este campo es obligatorio' }]}
                 >
-                  <Input type='number' placeholder="Número de Cuenta"/>
+                  <Input disabled={created} type='number' placeholder="Número de Cuenta"/>
                 </Form.Item>
 
                 {/* Primer y Segundo Nombre */}
