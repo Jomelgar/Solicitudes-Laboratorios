@@ -23,7 +23,7 @@ export async function readLabSectionExcel(file) {
 export function downloadLabSectionTemplateExcel(classReferenceData) {
   // Plantilla vacía para lab_section
   const labSectionTemplate = [
-    { Id_Clase: '0', Seccion: '0000', Trimestre: 'Q1',Dia: 'Lunes',Empieza: '8:10:00', Termina: '9:55:00'}
+    { Id_Clase: '0', Seccion: '0000', Trimestre: 'Q1',Dia: 'Lunes',Empieza: '8:10:00', Termina: '9:55:00',Año: '2025'}
   ];
 
   const workbook = XLSX.utils.book_new();
@@ -71,7 +71,7 @@ export async function readClassSectionExcel(file) {
 export function downloadClassSectionTemplateExcel(classReferenceData) {
   // Plantilla vacía para lab_section
   const ClassSectionTemplate = [
-    { Id_Clase: '0', Seccion: '0000',Trimestre:'Q1'}
+    { Id_Clase: '0', Seccion: '0000',Trimestre:'Q1',Año:'2025'}
   ];
 
   const workbook = XLSX.utils.book_new();

@@ -10,7 +10,7 @@ const AddLabModal = ({ open, onCancel, onAdd }) => {
   const [classes, setClasses] = useState([]);
 
   const fetchClasses = async () => {
-    const { data, error } = await supabase.from('class').select('*');
+    const { data, error } = await supabase.from('class').select('*').eq('active',true);
     if (data?.length > 0) {
       setClasses(data);
     }

@@ -14,7 +14,7 @@ const ClassSections = () => {
   const [loading, setLoading] = useState(true);
 
   const fetchClasses = async () => {
-    const { data, error } = await supabase.from('class').select('*');
+    const { data, error } = await supabase.from('class').select('*').eq('active', true);
     if (data?.length > 0) {
       setClasses(data.map((item) => ({ text: item.name, value: item.id })));
     }
@@ -92,7 +92,7 @@ const ClassSections = () => {
   const onImport = async (file) => {
     setLoading(true);
     const labs = await readLabSectionExcel(file);
-    const expectedKeys = ["Dia", "Empieza", "Termina", "Seccion", "Trimestre", "Id_Clase"];
+    const expectedKeys = ["Dia", "Empieza", "Termina", "Seccion", "Trimestre", "Id_Clase",'Año'];
 
     const isValid = labs.every(item => {
       const keys = Object.keys(item);
@@ -114,7 +114,8 @@ const ClassSections = () => {
       trimester: item.Trimestre,
       day: item.Dia,
       start_schedule: excelTimeToHHMMSS(item.Empieza),
-      end_schedule: excelTimeToHHMMSS(item.Termina)
+      end_schedule: excelTimeToHHMMSS(item.Termina),
+      year: item.Año
     }));
 
     const { error } = await supabase.from('lab_section').insert(mappedData);
@@ -219,7 +220,7 @@ const ClassSections = () => {
   ];
 
   return (
-    <div className="p-4 h-full">
+    <div className="p-4 h-full overflow-y-auto">
       <Card
         title={<h1 className="font-bold">Secciones de Laboratorios</h1>}
         extra={

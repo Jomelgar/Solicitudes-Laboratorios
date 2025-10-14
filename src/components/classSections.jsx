@@ -14,7 +14,7 @@ const ClassSections = () => {
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
 
   const fetchClasses = async () => {
-    const { data, error } = await supabase.from('class').select('*');
+    const { data, error } = await supabase.from('class').select('*').eq('active', true);
     if (data?.length > 0) {
       setClasses(data.map((item) => ({ text: item.name, value: item.id })));
     }
@@ -89,7 +89,7 @@ const ClassSections = () => {
     setLoading(true);
 
     const labs = await readClassSectionExcel(file);
-    const expectedKeys = ["Seccion", "Trimestre", "Id_Clase"];
+    const expectedKeys = ["Seccion", "Trimestre", "Id_Clase",'Año'];
 
     const isValid = labs.every(item => {
       const keys = Object.keys(item);
@@ -109,6 +109,7 @@ const ClassSections = () => {
       class_id: item.Id_Clase,
       section: item.Seccion,
       trimester: item.Trimestre,
+      year: item.Año
     }));
 
     const { error } = await supabase.from('class_section').insert(mappedData);
@@ -174,7 +175,7 @@ const ClassSections = () => {
   ];
 
   return (
-    <div className="p-4 h-full w-full">
+    <div className="p-4 h-full w-full overflow-y-auto">
       <Card
         title={<h1 className="font-bold">Secciones de Clases</h1>}
         extra={

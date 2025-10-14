@@ -47,20 +47,20 @@
 
     //Fetches
     const fetchClasses = async () => {
-        const { data, error } = await supabase.from('class').select('*');
+        const { data, error } = await supabase.from('class').select('*').eq('active', true);
         if(data.length > 0) {
           setClasses(data);
         }
     };
 
     const fetchClassSections = async (id) => {
-      const {data,error} = await supabase.from('class_section').select('*').eq('class_id',id);
+      const {data,error} = await supabase.from('class_section').select('*').eq('class_id',id).eq('active', true);
       setClassSections(data);
       form.setFieldsValue({ section: undefined });
     };
 
     const fetchLabSections = async(id) =>{
-      const {data, error} = await supabase.from('lab_section').select('*').eq('class_id',id);
+      const {data, error} = await supabase.from('lab_section').select('*').eq('class_id',id).eq('active', true);
       setLabSections(data || []);
       form.setFieldsValue({want_class: undefined, lab_section: undefined})
     };
